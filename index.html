@@ -406,10 +406,399 @@
       .cards { grid-template-columns: repeat(2, 1fr); }
       .form-row { grid-template-columns: 1fr; }
     }
+    
+    .login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)),
+    url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+}
+
+.login-card {
+  width: 90%;
+  max-width: 360px;
+  background: rgba(255,255,255,0.96);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.login-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--espresso);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 2rem;
+}
+
+.login-card h1 {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+}
+
+.login-card p {
+  text-align: center;
+  color: #777;
+  margin-top: -8px;
+}
+
+.login-btn {
+  background: var(--espresso);
+  color: white;
+  border: none;
+  padding: 0.9rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.login-btn:hover {
+  opacity: 0.9;
+}
+
+.quick-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.quick-btn {
+  border: none;
+  background: white;
+  border-radius: 16px;
+  padding: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transition: 0.2s;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.quick-btn:hover {
+  transform: translateY(-3px);
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.menu-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.menu-card:hover {
+  border-color: var(--caramel);
+  transform: scale(1.02);
+}
+
+.menu-card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.menu-card p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.fast-expense {
+  margin-top: 2rem;
+}
+
+.fast-expense h2 {
+  margin-bottom: 1rem;
+}
+
+.expense-group {
+  background: white;
+  padding: 1rem;
+  border-radius: 16px;
+  margin-bottom: 1rem;
+}
+
+.expense-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.expense-item {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 0.9rem;
+}
+
+.expense-item:hover {
+  background: var(--espresso);
+  color: white;
+}
+
+.temp-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.temp-modal.active {
+  display: flex;
+}
+
+.temp-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 320px;
+  text-align: center;
+}
+
+.temp-box h2 {
+  margin-bottom: 1.5rem;
+}
+
+.hot-btn,
+.cold-btn {
+  width: 100%;
+  border: none;
+  padding: 1rem;
+  border-radius: 14px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.hot-btn {
+  background: #ff7043;
+  color: white;
+}
+
+.cold-btn {
+  background: #42a5f5;
+  color: white;
+}
+
+.temp-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+.temp-modal.active{
+  display:flex;
+}
+
+.temp-box{
+  background:white;
+  padding:2rem;
+  border-radius:20px;
+  width:90%;
+  max-width:320px;
+  text-align:center;
+}
+
+.temp-box h2{
+  margin-bottom:1rem;
+}
+
+.hot-btn,
+.cold-btn{
+  width:100%;
+  border:none;
+  padding:1rem;
+  border-radius:14px;
+  margin-top:1rem;
+  cursor:pointer;
+  font-size:1rem;
+  font-weight:bold;
+}
+
+.hot-btn{
+  background:#ff7043;
+  color:white;
+}
+
+.cold-btn{
+  background:#42a5f5;
+  color:white;
+}
+
+/* --- Tambahkan atau Timpa CSS ini --- */
+
+.menu-grid {
+  display: grid;
+  /* Mengatur 2 kolom stabil untuk mobile, 3+ untuk layar lebar */
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.menu-card {
+  background: white;
+  border-radius: 10px;
+  padding: 0.75rem; /* Padding dikurangi agar padat */
+  border: 1px solid var(--border); /* Border tipis */
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.menu-card:hover {
+  border-color: var(--caramel);
+  background-color: var(--foam);
+}
+
+.menu-card h3 {
+  font-size: 0.85rem; /* Ukuran font diperkecil sedikit */
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+}
+
+.menu-card p {
+  color: var(--caramel);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.expense-group {
+  background: white;
+  padding: 0.8rem; /* Padding group dikurangi */
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.expense-group h3 {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: var(--espresso);
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 0.3rem;
+}
+
+/* Responsif untuk layar komputer/tablet */
+@media (min-width: 768px) {
+  .menu-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+.auth-extra {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.auth-extra a {
+  color: #8b5e3c;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.auth-extra a:hover {
+  color: #5c3b28;
+  text-decoration: underline;
+}
+
+.auth-extra span {
+  color: #999;
+}
+
+.change-password-box {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.change-password-box input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+}
+
+.change-password-box button {
+  background: #5c2d0c;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
   </style>
 </head>
 <body>
 
+
+
+<div id="loginPage" class="login-page">
+  <div class="login-card">
+    <div class="login-logo">☕</div>
+    <h1>Koes Coffee</h1>
+    <p>Sistem Kasir & Keuangan</p>
+
+    <input type="text" id="loginUser" placeholder="Username" />
+    <input type="password" id="loginPass" placeholder="Password" />
+
+    <button onclick="login()" class="login-btn">
+      Masuk
+    </button>
+  </div>
+</div>
+
+<div class="auth-extra">
+  <a href="/register">Daftar Akun</a>
+  <span>•</span>
+  <a href="/forgot-password">Lupa Password?</a>
+</div>
+
+<div id="app" style="display:none;">
 <header>
   <div class="brand">
     <div class="brand-icon">☕</div>
@@ -438,6 +827,34 @@
       <button class="period-btn" onclick="setDashPeriod('month',this)">Bulan Ini</button>
       <button class="period-btn" onclick="setDashPeriod('all',this)">Semua</button>
     </div>
+    
+    <div class="change-password-box">
+  <h3>Ganti Password</h3>
+
+  <input type="password" placeholder="Password Lama">
+  <input type="password" placeholder="Password Baru">
+  <input type="password" placeholder="Konfirmasi Password Baru">
+
+  <button>Simpan Password</button>
+</div>
+
+    <div class="quick-menu">
+  <button class="quick-btn" onclick="showPage('transaksi')">
+    ➕ Tambah Transaksi
+  </button>
+
+  <button class="quick-btn" onclick="showPage('riwayat')">
+    📋 Riwayat
+  </button>
+
+  <button class="quick-btn" onclick="showPage('laporan')">
+    📈 Laporan
+  </button>
+
+  <button class="quick-btn" onclick="quickSale()">
+    ☕ Jual Cepat
+  </button>
+</div>
 
     <div class="cards" id="dashCards"></div>
 
@@ -458,6 +875,143 @@
   </div>
 
   <!-- ── TRANSAKSI ── -->
+  <div class="section-title">Menu Minuman</div>
+
+<!-- COFFEE -->
+<div class="expense-group">
+  <h3>☕ Coffee (Hot / Cold)</h3>
+  <div class="menu-grid">
+    <div class="menu-card" onclick="showTempSelector({name:'Americano', hot:14000, cold:15000})">
+      <h3>Americano</h3>
+      <p>14K / 15K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Sanger', hot:15000, cold:16000})">
+      <h3>Sanger</h3>
+      <p>15K / 16K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Kopi Susu Gula Aren', hot:16000, cold:17000})">
+      <h3>Kopi Susu Gula Aren</h3>
+      <p>16K / 17K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Salted Caramel', hot:16000, cold:18000})">
+      <h3>Salted Caramel</h3>
+      <p>16K / 18K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Butterscotch Latte', hot:16000, cold:18000})">
+      <h3>Butterscotch Latte</h3>
+      <p>16K / 18K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Hazelnut Latte', hot:16000, cold:18000})">
+      <h3>Hazelnut Latte</h3>
+      <p>16K / 18K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Pandan Latte', hot:16000, cold:18000})">
+      <h3>Pandan Latte</h3>
+      <p>16K / 18K</p>
+    </div>
+
+    <!-- Hanya Cold (hot: 0) -->
+    <div class="menu-card" onclick="showTempSelector({name:'Kopi Andalan Koes', hot:0, cold:20000})">
+      <h3>Kopi Andalan Koes</h3>
+      <p>20K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Sanger Koes', hot:0, cold:18000})">
+      <h3>Sanger Koes</h3>
+      <p>18K</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- NON COFFEE -->
+<div class="expense-group">
+  <h3>🍵 Non Coffee (Hot / Cold)</h3>
+  <div class="menu-grid">
+    <div class="menu-card" onclick="showTempSelector({name:'Cokelat Latte', hot:16000, cold:17000})">
+      <h3>Cokelat Latte</h3>
+      <p>16K / 17K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Matcha Latte', hot:16000, cold:17000})">
+      <h3>Matcha Latte</h3>
+      <p>16K / 17K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Taro Latte', hot:16000, cold:17000})">
+      <h3>Taro Latte</h3>
+      <p>16K / 17K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Red Velvet Latte', hot:16000, cold:17000})">
+      <h3>Red Velvet Latte</h3>
+      <p>16K / 17K</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- MOCKTAIL -->
+<!-- MOCKTAIL -->
+<div class="expense-group">
+  <h3>🍹 Mocktail (Cold Only)</h3>
+  <div class="menu-grid">
+    <!-- Menggunakan showTempSelector dengan hot: 0 -->
+    <div class="menu-card" onclick="showTempSelector({name:'Rainbow Blast', hot:0, cold:16000})">
+      <h3>Rainbow Blast</h3>
+      <p>16K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Blue Ocean', hot:0, cold:16000})">
+      <h3>Blue Ocean</h3>
+      <p>16K</p>
+    </div>
+  </div>
+</div>
+
+<!-- TEA (Update Peach & Lychee) -->
+<div class="expense-group">
+  <h3>🍋 Tea</h3>
+  <div class="menu-grid">
+    <div class="menu-card" onclick="showTempSelector({name:'Lemon Tea', hot:14000, cold:15000})">
+      <h3>Lemon Tea</h3>
+      <p>14K / 15K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Peach Tea', hot:0, cold:17000})">
+      <h3>Peach Tea</h3>
+      <p>17K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Lychee Tea', hot:0, cold:17000})">
+      <h3>Lychee Tea</h3>
+      <p>17K</p>
+    </div>
+  </div>
+</div>
+
+<!-- YAKULT -->
+<div class="expense-group">
+  <h3>🥛 Yakult Series (Cold Only)</h3>
+  <div class="menu-grid">
+    <div class="menu-card" onclick="showTempSelector({name:'Yakult Matcha', hot:0, cold:20000})">
+      <h3>Matcha Yakult</h3>
+      <p>20K</p>
+    </div>
+
+    <div class="menu-card" onclick="showTempSelector({name:'Yakult Mango', hot:0, cold:20000})">
+      <h3>Mango Yakult</h3>
+      <p>20K</p>
+    </div>
+  </div>
+</div>
+
   <div class="page" id="page-transaksi">
     <div class="form-card">
       <div class="section-title">Tambah Transaksi Baru</div>
@@ -503,6 +1057,65 @@
         <button class="btn btn-ghost" onclick="clearForm()">↺ Reset</button>
       </div>
     </div>
+    <div class="fast-expense">
+
+<h2>Pengeluaran Cepat</h2>
+
+<div class="expense-group">
+  <h3>Serbuk</h3>
+
+  <div class="expense-items">
+    <div class="expense-item" onclick="quickExpense('Serbuk Taro')">Taro</div>
+    <div class="expense-item" onclick="quickExpense('Serbuk Matcha')">Matcha</div>
+    <div class="expense-item" onclick="quickExpense('Serbuk Red Velvet')">Red Velvet</div>
+    <div class="expense-item" onclick="quickExpense('Serbuk Cokelat')">Cokelat</div>
+    <div class="expense-item" onclick="quickExpense('Krimer')">Krimer</div>
+  </div>
+</div>
+
+<div class="expense-group">
+  <h3>Syrup</h3>
+
+  <div class="expense-items">
+    <div class="expense-item" onclick="quickExpense('Sprite')">Sprite</div>
+    <div class="expense-item" onclick="quickExpense('Pandan')">Pandan</div>
+    <div class="expense-item" onclick="quickExpense('Karamel')">Karamel</div>
+    <div class="expense-item" onclick="quickExpense('Butterscotch')">Butterscotch</div>
+    <div class="expense-item" onclick="quickExpense('Hazelnut')">Hazelnut</div>
+    <div class="expense-item" onclick="quickExpense('Blueberry')">Blueberry</div>
+    <div class="expense-item" onclick="quickExpense('Salted Caramel')">Salted Caramel</div>
+    <div class="expense-item" onclick="quickExpense('Jeruk')">Jeruk</div>
+    <div class="expense-item" onclick="quickExpense('Leci')">Leci</div>
+    <div class="expense-item" onclick="quickExpense('Melon')">Melon</div>
+    <div class="expense-item" onclick="quickExpense('Fanta')">Fanta</div>
+    <div class="expense-item" onclick="quickExpense('Gula Aren')">Gula Aren</div>
+  </div>
+</div>
+
+<div class="expense-group">
+  <h3>Bahan Lain</h3>
+
+  <div class="expense-items">
+    <div class="expense-item" onclick="quickExpense('UHT')">UHT</div>
+    <div class="expense-item" onclick="quickExpense('Es Batu')">Es Batu</div>
+    <div class="expense-item" onclick="quickExpense('Air Galon')">Air Galon</div>
+    <div class="expense-item" onclick="quickExpense('Cup')">Cup</div>
+    <div class="expense-item" onclick="quickExpense('SKM')">SKM</div>
+    <div class="expense-item" onclick="quickExpense('Kopi')">Kopi</div>
+  </div>
+</div>
+
+<div class="expense-group">
+  <h3>Pengeluaran Lain</h3>
+
+  <input type="text" id="customExpense" placeholder="Masukkan pengeluaran lain" />
+
+  <button class="btn btn-primary" style="margin-top:1rem;" onclick="customExpense()">
+    Tambah Pengeluaran
+  </button>
+</div>
+
+</div>
 
     <!-- Kelola Kategori -->
     <div class="section-title">Kelola Kategori</div>
@@ -600,10 +1213,79 @@
     </div>
   </div>
 </div>
+<div class="temp-modal" id="tempModal">
+  <div class="temp-box">
+    <h2>Pilih Jenis</h2>
 
+    <button onclick="chooseTemp('hot')" class="hot-btn">
+      🔥 HOT
+    </button>
+
+    <button onclick="chooseTemp('cold')" class="cold-btn">
+      ❄️ COLD
+    </button>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
+  const menuItems = [
+  {
+    name: 'Americano',
+    hot: 14000,
+    cold: 15000
+  },
+  {
+    name: 'Sanger',
+    hot: 15000,
+    cold: 16000
+  },
+  {
+    name: 'Kopi Susu Gula Aren',
+    hot: 16000,
+    cold: 17000
+  },
+  {
+    name: 'Salted Caramel',
+    hot: 16000,
+    cold: 18000
+  },
+  {
+    name: 'Butterscotch Latte',
+    hot: 16000,
+    cold: 18000
+  },
+  {
+    name: 'Hazelnut Latte',
+    hot: 16000,
+    cold: 18000
+  },
+  {
+    name: 'Pandan Latte',
+    hot: 16000,
+    cold: 18000
+  },
+  {
+    name: 'Cokelat Latte',
+    hot: 16000,
+    cold: 17000
+  },
+  {
+    name: 'Matcha Latte',
+    hot: 16000,
+    cold: 17000
+  },
+  {
+    name: 'Taro Latte',
+    hot: 16000,
+    cold: 17000
+  },
+  {
+    name: 'Red Velvet Latte',
+    hot: 16000,
+    cold: 17000
+  }
+]
 // ══════════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════════
@@ -621,6 +1303,7 @@ let currentType  = 'pemasukan';
 let dashPeriod   = 'today';
 let lapPeriod    = 'today';
 let deleteId     = null;
+let selectedMenu = null;
 
 // ══════════════════════════════════════════════════
 //  PERSIST
@@ -660,6 +1343,23 @@ function getCatName(id) {
   return (categories.find(c=>c.id===id)||{name:'—'}).name;
 }
 
+function renderMenu() {
+  const menuGrid = document.getElementById('menuGrid')
+
+  menuGrid.innerHTML = menuItems.map(item => `
+    <div class="menu-card" onclick='showTempSelector(${JSON.stringify(item)})'>
+      <h3>${item.name}</h3>
+
+      <p>
+        HOT : Rp ${item.hot.toLocaleString('id-ID')}
+      </p>
+
+      <p>
+        COLD : Rp ${item.cold.toLocaleString('id-ID')}
+      </p>
+    </div>
+  `).join('')
+}
 // ══════════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════════
@@ -678,6 +1378,7 @@ function init() {
   renderDashboard();
   renderHistory();
   renderLaporan();
+  renderMenu();
 }
 
 // ══════════════════════════════════════════════════
@@ -1025,6 +1726,87 @@ document.getElementById('deleteModal').addEventListener('click', e=>{
 });
 
 init();
+function login() {
+  const user = document.getElementById('loginUser').value;
+  const pass = document.getElementById('loginPass').value;
+
+  if(user === 'admin' && pass === '123456') {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+
+    showToast('Login berhasil');
+  } else {
+    alert('Username atau password salah');
+  }
+}
+
+
+
+function quickExpense(name) {
+  setType('pengeluaran');
+
+  document.getElementById('txDesc').value = name;
+  document.getElementById('txAmount').focus();
+
+  showToast('Isi nominal untuk ' + name);
+}
+
+function customExpense() {
+  const val = document.getElementById('customExpense').value;
+
+  if(!val) {
+    alert('Isi dulu pengeluarannya');
+    return;
+  }
+
+  quickExpense(val);
+
+  document.getElementById('customExpense').value = '';
+}
+
+function quickSale() {
+  showPage('transaksi');
+  setType('pemasukan');
+}
+
+function showTempSelector(item) {
+  selectedMenu = item
+  document.getElementById('tempModal').classList.add('active')
+}
+
+function closeTempModal() {
+  document.getElementById('tempModal').classList.remove('active')
+}
+
+function chooseTemp(temp) {
+
+  if(!selectedMenu) return
+
+  const price = temp === 'hot'
+    ? selectedMenu.hot
+    : selectedMenu.cold
+
+  if(price <= 0) {
+    showToast('Menu tidak tersedia')
+    return
+  }
+
+  setType('pemasukan')
+
+  document.getElementById('txDesc').value =
+    selectedMenu.name + ' (' + temp.toUpperCase() + ')'
+
+  document.getElementById('txAmount').value = price
+
+  closeTempModal()
+
+  showToast(selectedMenu.name + ' ' + temp.toUpperCase())
+}
+
+function closeTempModal() {
+  document.getElementById('tempModal').classList.remove('active')
+}
 </script>
 </body>
 </html>
+
