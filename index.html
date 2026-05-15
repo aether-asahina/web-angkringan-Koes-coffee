@@ -973,6 +973,95 @@ body.dark .menu-card:hover {
 
 }
 
+/* RGB BORDER MENU CARD */
+
+.menu-card {
+
+  position: relative;
+
+  background: white;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  z-index: 1;
+
+  border: none !important;
+
+}
+
+/* layer rgb */
+
+.menu-card::before {
+
+  content: '';
+
+  position: absolute;
+
+  inset: -2px;
+
+  background: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00ab,
+    #ff0000
+  );
+
+  background-size: 400%;
+
+  animation: rgbBorder 8s linear infinite;
+
+  z-index: -2;
+
+}
+
+/* inner background */
+
+.menu-card::after {
+
+  content: '';
+
+  position: absolute;
+
+  inset: 2px;
+
+  background: white;
+
+  border-radius: 14px;
+
+  z-index: -1;
+
+}
+
+/* dark mode support */
+
+body.dark .menu-card::after {
+
+  background: #1B1B1B;
+
+}
+
+/* animation */
+
+@keyframes rgbBorder {
+
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 400% 50%;
+  }
+
+}    
+    
   </style>
 </head>
 <body>
