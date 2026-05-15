@@ -783,8 +783,9 @@
     <h1>Koes Coffee</h1>
     <p>Sistem Kasir & Keuangan</p>
 
-    <input type="text" id="loginUser" placeholder="Username" />
+    <input type="email" id="loginUser" placeholder="Email" />
     <input type="password" id="loginPass" placeholder="Password" />
+    
 
     <button onclick="login()" class="login-btn">
       Masuk
@@ -793,7 +794,7 @@
 </div>
 
 <div class="auth-extra">
-  <a href="/register">Daftar Akun</a>
+  <a href="#">Daftar Akun</a>
   <span>•</span>
   <a href="/forgot-password">Lupa Password?</a>
 </div>
@@ -875,7 +876,10 @@
   </div>
 
   <!-- ── TRANSAKSI ── -->
-  <div class="section-title">Menu Minuman</div>
+  
+
+  <div class="page" id="page-transaksi">
+    <div class="section-title">Menu Minuman</div>
 
 <!-- COFFEE -->
 <div class="expense-group">
@@ -1011,8 +1015,6 @@
     </div>
   </div>
 </div>
-
-  <div class="page" id="page-transaksi">
     <div class="form-card">
       <div class="section-title">Tambah Transaksi Baru</div>
 
@@ -1202,17 +1204,8 @@
 
 </main>
 
-<!-- DELETE MODAL -->
-<div class="modal-overlay" id="deleteModal">
-  <div class="modal">
-    <h2>Hapus Transaksi?</h2>
-    <p style="color:var(--text-soft); font-size:0.9rem;">Transaksi ini akan dihapus permanen dan tidak bisa dikembalikan.</p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
-      <button class="btn btn-danger" onclick="confirmDelete()">Hapus</button>
-    </div>
-  </div>
-</div>
+
+
 <div class="temp-modal" id="tempModal">
   <div class="temp-box">
     <h2>Pilih Jenis</h2>
@@ -1228,7 +1221,60 @@
 </div>
 <div class="toast" id="toast"></div>
 
-<script>
+<!-- Modal Konfirmasi Hapus (Opsional tapi perlu agar tidak error) -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <h2>Hapus Transaksi?</h2>
+    <p>Tindakan ini tidak dapat dibatalkan.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn">Ya, Hapus</button>
+    </div>
+  </div>
+</div>
+</div>
+  
+  
+<script type="module">
+  
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+  updateDoc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCeSqRWg0MNOq51EyKXerb9Yhc-Knzfo8k",
+  authDomain: "angkringan-12330.firebaseapp.com",
+  projectId: "angkringan-12330",
+  storageBucket: "angkringan-12330.firebasestorage.app",
+  messagingSenderId: "630385630007",
+  appId: "1:630385630007:web:e19e29f1512705d704d8b2",
+  measurementId: "G-MHDVHFSF16"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+  // ... (kode menuItems lu tetap di sini)
+
   const menuItems = [
   {
     name: 'Americano',
@@ -1289,15 +1335,15 @@
 // ══════════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════════
-let transactions = JSON.parse(localStorage.getItem('koes_tx') || '[]');
-let categories   = JSON.parse(localStorage.getItem('koes_cat') || JSON.stringify([
+let transactions = [];
+let categories = [
   { id:'c1', name:'Minuman', type:'pemasukan' },
   { id:'c2', name:'Makanan', type:'pemasukan' },
   { id:'c3', name:'Lainnya', type:'keduanya' },
   { id:'c4', name:'Bahan Baku', type:'pengeluaran' },
   { id:'c5', name:'Operasional', type:'pengeluaran' },
-  { id:'c6', name:'Gaji', type:'pengeluaran' },
-]));
+  { id:'c6', name:'Gaji', type:'pengeluaran' }
+];
 
 let currentType  = 'pemasukan';
 let dashPeriod   = 'today';
@@ -1308,10 +1354,7 @@ let selectedMenu = null;
 // ══════════════════════════════════════════════════
 //  PERSIST
 // ══════════════════════════════════════════════════
-function save() {
-  localStorage.setItem('koes_tx',  JSON.stringify(transactions));
-  localStorage.setItem('koes_cat', JSON.stringify(categories));
-}
+
 
 // ══════════════════════════════════════════════════
 //  UTILS
@@ -1343,23 +1386,7 @@ function getCatName(id) {
   return (categories.find(c=>c.id===id)||{name:'—'}).name;
 }
 
-function renderMenu() {
-  const menuGrid = document.getElementById('menuGrid')
 
-  menuGrid.innerHTML = menuItems.map(item => `
-    <div class="menu-card" onclick='showTempSelector(${JSON.stringify(item)})'>
-      <h3>${item.name}</h3>
-
-      <p>
-        HOT : Rp ${item.hot.toLocaleString('id-ID')}
-      </p>
-
-      <p>
-        COLD : Rp ${item.cold.toLocaleString('id-ID')}
-      </p>
-    </div>
-  `).join('')
-}
 // ══════════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════════
@@ -1378,7 +1405,8 @@ function init() {
   renderDashboard();
   renderHistory();
   renderLaporan();
-  renderMenu();
+  
+  loadTransactions();
 }
 
 // ══════════════════════════════════════════════════
@@ -1410,6 +1438,8 @@ function setType(t) {
 // ══════════════════════════════════════════════════
 function populateCatSelect() {
   const sel = document.getElementById('txCat');
+  if (!sel) return; // Guard clause
+  
   const cats = categories.filter(c=>c.type===currentType||c.type==='keduanya');
   sel.innerHTML = cats.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
 
@@ -1419,6 +1449,7 @@ function populateCatSelect() {
       categories.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
   }
 }
+
 
 function renderCatList() {
   document.getElementById('catList').innerHTML = categories.map(c=>`
@@ -1435,7 +1466,7 @@ function addCategory() {
   const type = document.getElementById('newCatType').value;
   if (!name) { showToast('⚠ Nama kategori tidak boleh kosong'); return; }
   categories.push({ id: uid(), name, type });
-  save();
+  
   document.getElementById('newCatName').value = '';
   renderCatList();
   populateCatSelect();
@@ -1444,7 +1475,7 @@ function addCategory() {
 
 function deleteCat(id) {
   categories = categories.filter(c=>c.id!==id);
-  save();
+  
   renderCatList();
   populateCatSelect();
   showToast('Kategori dihapus');
@@ -1453,22 +1484,44 @@ function deleteCat(id) {
 // ══════════════════════════════════════════════════
 //  TRANSACTIONS
 // ══════════════════════════════════════════════════
-function saveTransaction() {
+async function saveTransaction() {
   const desc   = document.getElementById('txDesc').value.trim();
   const amount = parseFloat(document.getElementById('txAmount').value);
   const catId  = document.getElementById('txCat').value;
   const date   = document.getElementById('txDate').value;
   const note   = document.getElementById('txNote').value.trim();
+  
+
 
   if (!desc)          { showToast('⚠ Keterangan wajib diisi'); return; }
   if (!amount || amount<=0) { showToast('⚠ Jumlah harus lebih dari 0'); return; }
   if (!date)          { showToast('⚠ Tanggal wajib diisi'); return; }
 
-  transactions.unshift({ id:uid(), type:currentType, desc, amount, catId, date, note, createdAt: new Date().toISOString() });
-  save();
+  try {
+
+  await addDoc(collection(db, "transaksi_angkringan"), {
+    type: currentType,
+    desc,
+    amount,
+    catId,
+    date,
+    note,
+    createdAt: serverTimestamp()
+  });
+
+  showToast('✓ Transaksi disimpan ke Firebase');
+
   clearForm();
-  showToast('✓ Transaksi disimpan!');
-  renderDashboard();
+
+  await loadTransactions();
+
+} catch(err) {
+
+  console.error(err);
+
+  showToast('❌ Gagal simpan ke Firebase');
+
+}
 }
 
 function clearForm() {
@@ -1482,24 +1535,27 @@ function clearForm() {
 }
 
 // ── DELETE
-function promptDelete(id) {
-  deleteId = id;
-  document.getElementById('deleteModal').classList.add('open');
-}
+
 function closeModal() {
   deleteId = null;
   document.getElementById('deleteModal').classList.remove('open');
 }
-function confirmDelete() {
-  if (!deleteId) return;
-  transactions = transactions.filter(t=>t.id!==deleteId);
-  save();
-  closeModal();
-  renderDashboard();
-  renderHistory();
-  renderLaporan();
-  showToast('Transaksi dihapus');
-}
+
+// FUNGSI UNTUK MENGHAPUS DARI FIREBASE
+const hapusDariFirebase = async function(docId) {
+  if (confirm("Hapus transaksi ini dari database cloud?")) {
+    try {
+      await deleteDoc(doc(db, "transaksi_angkringan", docId));
+      showToast('✓ Berhasil dihapus');
+      await loadTransactions(); // Refresh data dari server
+    } catch (error) {
+      console.error("Error hapus:", error);
+      showToast('❌ Gagal menghapus data');
+    }
+  }
+};
+window.hapusDariFirebase = hapusDariFirebase;
+
 
 // ══════════════════════════════════════════════════
 //  DASHBOARD
@@ -1586,38 +1642,8 @@ function buildCatBar(list, type, max) {
 // ══════════════════════════════════════════════════
 //  HISTORY
 // ══════════════════════════════════════════════════
-function renderHistory() {
-  const q    = (document.getElementById('searchQ')?.value||'').toLowerCase();
-  const type = document.getElementById('filterType')?.value || '';
-  const cat  = document.getElementById('filterCat')?.value  || '';
-  const from = document.getElementById('filterDateFrom')?.value;
-  const to   = document.getElementById('filterDateTo')?.value;
+// Bagian dalam renderHistory di kodingan lu
 
-  let list = [...transactions];
-  if (q)    list = list.filter(t=>t.desc.toLowerCase().includes(q)||t.note?.toLowerCase().includes(q));
-  if (type) list = list.filter(t=>t.type===type);
-  if (cat)  list = list.filter(t=>t.catId===cat);
-  if (from) list = list.filter(t=>new Date(t.date)>=new Date(from));
-  if (to)   list = list.filter(t=>new Date(t.date)<=new Date(to+'T23:59:59'));
-
-  document.getElementById('historyEmpty').style.display = list.length ? 'none' : 'block';
-
-  document.getElementById('historyBody').innerHTML = list.map(t=>`
-    <tr>
-      <td style="font-family:'DM Mono',monospace;font-size:0.75rem;">${fmtDate(t.date)}</td>
-      <td>
-        <div style="font-weight:600;">${t.desc}</div>
-        ${t.note?`<div style="font-size:0.75rem;color:var(--text-soft);">${t.note}</div>`:''}
-      </td>
-      <td><span class="badge badge-${t.type==='pemasukan'?'income':'expense'}">${getCatName(t.catId)}</span></td>
-      <td><span class="badge badge-${t.type==='pemasukan'?'income':'expense'}">${t.type==='pemasukan'?'Masuk':'Keluar'}</span></td>
-      <td class="amount-${t.type==='pemasukan'?'income':'expense'}" style="white-space:nowrap;">${t.type==='pemasukan'?'+':'-'}${fmt(t.amount)}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="promptDelete('${t.id}')">✕</button></td>
-    </tr>
-  `).join('');
-
-  populateCatSelect();
-}
 
 // ══════════════════════════════════════════════════
 //  LAPORAN
@@ -1720,36 +1746,58 @@ function showToast(msg) {
 
 // ══════════════════════════════════════════════════
 //  CLOSE MODAL ON OUTSIDE CLICK
-// ══════════════════════════════════════════════════
-document.getElementById('deleteModal').addEventListener('click', e=>{
-  if(e.target===e.currentTarget) closeModal();
+// ═══════════════════════════════════════════════window.addEventListener('error', e => {
+  console.error(e.error);
 });
 
 init();
-function login() {
-  const user = document.getElementById('loginUser').value;
-  const pass = document.getElementById('loginPass').value;
 
-  if(user === 'admin' && pass === '123456') {
+
+async function login() {
+
+  const email = document.getElementById('loginUser').value.trim();
+  const pass  = document.getElementById('loginPass').value.trim();
+
+  if(!email || !pass){
+    showToast('Isi email dan password');
+    return;
+  }
+
+  try {
+
+    await signInWithEmailAndPassword(auth, email, pass);
+
     document.getElementById('loginPage').style.display = 'none';
     document.getElementById('app').style.display = 'block';
 
-    showToast('Login berhasil');
-  } else {
-    alert('Username atau password salah');
+    showToast('✓ Login berhasil');
+
+    await loadTransactions();
+
+  } catch(err) {
+
+    console.error(err);
+
+    showToast('❌ ' + err.message);
+
   }
+
 }
 
 
 
 function quickExpense(name) {
   setType('pengeluaran');
-
   document.getElementById('txDesc').value = name;
-  document.getElementById('txAmount').focus();
+  
+  // Otomatis pilih kategori 'Bahan Baku' (id: c4) jika ada
+  const catSelect = document.getElementById('txCat');
+  if (catSelect) catSelect.value = 'c4'; 
 
+  document.getElementById('txAmount').focus();
   showToast('Isi nominal untuk ' + name);
 }
+
 
 function customExpense() {
   const val = document.getElementById('customExpense').value;
@@ -1803,9 +1851,100 @@ function chooseTemp(temp) {
   showToast(selectedMenu.name + ' ' + temp.toUpperCase())
 }
 
-function closeTempModal() {
-  document.getElementById('tempModal').classList.remove('active')
+
+
+function renderHistory() {
+  let list = [...transactions];
+  const q = document.getElementById('searchQ')?.value.toLowerCase() || "";
+  const type = document.getElementById('filterType')?.value || "";
+  const cat = document.getElementById('filterCat')?.value || "";
+  const from = document.getElementById('filterDateFrom')?.value || "";
+  const to = document.getElementById('filterDateTo')?.value || "";
+
+  if(q) list = list.filter(t => t.desc.toLowerCase().includes(q));
+  if(type) list = list.filter(t => t.type === type);
+  if(cat) list = list.filter(t => t.catId === cat);
+  if(from) list = list.filter(t => t.date >= from);
+  if(to) list = list.filter(t => t.date <= to + 'T23:59');
+
+  const historyBody = document.getElementById('historyBody');
+  const emptyState = document.getElementById('historyEmpty');
+  
+  if (emptyState) emptyState.style.display = list.length ? 'none' : 'block';
+  if (!historyBody) return;
+
+  historyBody.innerHTML = list.map(t => `
+    <tr>
+      <td style="font-family:'DM Mono',monospace;font-size:0.75rem;">${fmtDate(t.date)}</td>
+      <td><div style="font-weight:600;">${t.desc}</div></td>
+      <td><span class="badge badge-${t.type==='pemasukan'?'income':'expense'}">${getCatName(t.catId)}</span></td>
+      <td><span class="badge badge-${t.type==='pemasukan'?'income':'expense'}">${t.type==='pemasukan'?'Masuk':'Keluar'}</span></td>
+      <td class="amount-${t.type==='pemasukan'?'income':'expense'}">${t.type==='pemasukan'?'+':'-'}${fmt(t.amount)}</td>
+      <td>
+        <button class="btn btn-danger btn-sm" onclick="hapusDariFirebase('${t.id}')">✕</button>
+      </td>
+    </tr>
+  `).join('');
 }
+
+
+async function loadTransactions() {
+
+  try {
+
+    const querySnapshot = await getDocs(
+      collection(db, "transaksi_angkringan")
+    );
+
+    transactions = [];
+
+    querySnapshot.forEach((docSnap) => {
+
+      transactions.push({
+        id: docSnap.id,
+        ...docSnap.data()
+      });
+
+    });
+
+    transactions.sort((a,b) => {
+      return new Date(b.date) - new Date(a.date)
+    });
+
+    renderDashboard();
+    renderHistory();
+    renderLaporan();
+
+  } catch(err) {
+
+    console.error(err);
+
+    showToast('❌ Gagal load Firebase');
+
+  }
+
+}
+
+// Ekspos fungsi ke global agar bisa dipanggil oleh attribute onclick di HTML
+window.login = login;
+window.showPage = showPage;
+window.setType = setType;
+window.saveTransaction = saveTransaction;
+window.clearForm = clearForm;
+window.addCategory = addCategory;
+window.deleteCat = deleteCat;
+window.setDashPeriod = setDashPeriod;
+window.setLapPeriod = setLapPeriod;
+window.quickExpense = quickExpense;
+window.customExpense = customExpense;
+window.quickSale = quickSale;
+window.showTempSelector = showTempSelector;
+window.chooseTemp = chooseTemp;
+window.exportCSV = exportCSV;
+window.renderHistory = renderHistory;
+window.hapusDariFirebase = hapusDariFirebase;
+
+
 </script>
 </body>
 </html>
