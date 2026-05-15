@@ -793,11 +793,7 @@
   </div>
 </div>
 
-<div class="auth-extra">
-  <a href="#">Daftar Akun</a>
-  <span>•</span>
-  <a href="/forgot-password">Lupa Password?</a>
-</div>
+
 
 <div id="app" style="display:none;">
 <header>
@@ -829,15 +825,7 @@
       <button class="period-btn" onclick="setDashPeriod('all',this)">Semua</button>
     </div>
     
-    <div class="change-password-box">
-  <h3>Ganti Password</h3>
 
-  <input type="password" placeholder="Password Lama">
-  <input type="password" placeholder="Password Baru">
-  <input type="password" placeholder="Konfirmasi Password Baru">
-
-  <button>Simpan Password</button>
-</div>
 
     <div class="quick-menu">
   <button class="quick-btn" onclick="showPage('transaksi')">
@@ -1746,9 +1734,11 @@ function showToast(msg) {
 
 // ══════════════════════════════════════════════════
 //  CLOSE MODAL ON OUTSIDE CLICK
-// ═══════════════════════════════════════════════window.addEventListener('error', e => {
-  console.error(e.error);
-});
+// ══════════════════════════════════════════════
+window.onerror = function(msg, url, line) {
+  console.error("Error: " + msg + "\nLine: " + line);
+  // showToast("Ada error sistem, cek koneksi"); 
+};
 
 init();
 
@@ -1948,4 +1938,3 @@ window.hapusDariFirebase = hapusDariFirebase;
 </script>
 </body>
 </html>
-
