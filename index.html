@@ -905,6 +905,74 @@ body.dark .menu-card:hover {
   background: #222;
 }
 
+    /* RGB MENU CARD */
+
+.menu-card {
+
+  background: linear-gradient(
+    135deg,
+    #ff0080,
+    #7928ca,
+    #00c6ff
+  ) !important;
+
+  color: white !important;
+
+  border: none !important;
+
+  position: relative;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 4px 20px rgba(121,40,202,0.35);
+
+}
+
+.menu-card h3,
+.menu-card p {
+
+  color: white !important;
+
+}
+
+.menu-card::before {
+
+  content: '';
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      120deg,
+      transparent,
+      rgba(255,255,255,0.2),
+      transparent
+    );
+
+  transform: translateX(-100%);
+
+  transition: 0.7s;
+
+}
+
+.menu-card:hover::before {
+
+  transform: translateX(100%);
+
+}
+
+.menu-card:hover {
+
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 8px 28px rgba(0,198,255,0.35);
+
+}
+
   </style>
 </head>
 <body>
