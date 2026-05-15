@@ -262,8 +262,12 @@
       background: var(--foam);
       border: 1px solid var(--border);
       border-radius: 12px;
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
       box-shadow: 0 2px 8px var(--shadow);
+    }
+    table{
+      min-width: 720px;
     }
     .table-toolbar {
       padding: 1rem 1.25rem;
@@ -271,6 +275,15 @@
       border-bottom: 1px solid var(--border);
       background: var(--cream);
     }
+
+    .table-wrap: : -webkit-scrollbar{
+      height: 6px;
+    }
+     .table-wrap: : -webkit-scrollbar-thumb{
+      background: var(--caramel);
+      border-radius: 999px;
+    }
+    
     .table-toolbar input, .table-toolbar select { max-width: 160px; }
     .table-toolbar .spacer { flex: 1; }
     table { width: 100%; border-collapse: collapse; }
