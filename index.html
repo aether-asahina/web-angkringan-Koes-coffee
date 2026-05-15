@@ -611,6 +611,99 @@
   color: white;
 }
 
+    /* RGB BUTTON HOT / COLD */
+
+.hot-btn,
+.cold-btn{
+  position: relative;
+
+  overflow: hidden;
+
+  border: none;
+
+  border-radius: 16px;
+
+  background: transparent !important;
+
+  color: white;
+
+  z-index: 1;
+
+  font-weight: bold;
+
+  transition: 0.25s;
+}
+
+/* rgb border */
+
+.hot-btn::before,
+.cold-btn::before{
+
+  content: '';
+
+  position: absolute;
+
+  width: 300%;
+  height: 300%;
+
+  top: -100%;
+  left: -100%;
+
+  background: conic-gradient(
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00ab,
+    #ff0000
+  );
+
+  animation: rotateRGB 4s linear infinite;
+
+  z-index: -2;
+}
+
+/* inner background */
+
+.hot-btn::after,
+.cold-btn::after{
+
+  content: '';
+
+  position: absolute;
+
+  inset: 2px;
+
+  border-radius: 14px;
+
+  z-index: -1;
+}
+
+/* warna isi */
+
+.hot-btn::after{
+  background: #ff7043;
+}
+
+.cold-btn::after{
+  background: #42a5f5;
+}
+
+/* hover */
+
+.hot-btn:hover,
+.cold-btn:hover{
+
+  transform: translateY(-3px) scale(1.02);
+
+  box-shadow:
+    0 0 20px rgba(255,0,128,0.25),
+    0 0 35px rgba(0,229,255,0.18);
+}
+
 .temp-modal{
   position:fixed;
   inset:0;
