@@ -1085,6 +1085,14 @@ body.dark .menu-card::after{
     ">
     🌙
   </button>
+  <button onclick="logout()" style="
+  background:none;
+  border:1px solid rgba(255,255,255,0.15);
+  color:white;
+  border-radius:10px;
+  padding:8px 12px;
+  cursor:pointer;
+">🚪</button>
 
   <div class="header-date" id="headerDate"></div>
 
@@ -1130,6 +1138,14 @@ body.dark .menu-card::after{
 </div>
 
     <div class="cards" id="dashCards"></div>
+    <div class="chart-area">
+  <h2 class="section-title">
+    Grafik Keuangan
+    <span>7 Hari Terakhir</span>
+  </h2>
+
+  <canvas id="financeChart" height="120"></canvas>
+</div>
 
     <div class="section-title">Grafik Keuangan <span id="dashPeriodLabel">— Hari Ini</span></div>
     <div class="chart-area">
@@ -1522,13 +1538,15 @@ import {
   doc,
   serverTimestamp,
   updateDoc,
-  setDoc
+  setDoc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 import {
   getAuth,
   signInWithEmailAndPassword,
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
@@ -1623,6 +1641,7 @@ let dashPeriod   = 'today';
 let lapPeriod    = 'today';
 let deleteId     = null;
 let selectedMenu = null;
+let currentUserRole = 'viewer';
 
 // ══════════════════════════════════════════════════
 //  PERSIST
@@ -1680,6 +1699,7 @@ function init() {
   renderLaporan();
   
   loadTransactions();
+  renderFinanceChart();
 }
 
 // ══════════════════════════════════════════════════
@@ -1758,6 +1778,13 @@ function deleteCat(id) {
 //  TRANSACTIONS
 // ══════════════════════════════════════════════════
 async function saveTransaction() {
+  if(currentUserRole === 'viewer') {
+
+  showToast('❌ Viewer tidak punya akses');
+
+  return;
+
+}
   const desc   = document.getElementById('txDesc').value.trim();
   const amount = parseFloat(document.getElementById('txAmount').value);
   const catId  = document.getElementById('txCat').value;
@@ -1787,6 +1814,7 @@ async function saveTransaction() {
   clearForm();
 
   await loadTransactions();
+  renderFinanceChart();
 
 } catch(err) {
 
@@ -1816,6 +1844,13 @@ function closeModal() {
 
 // FUNGSI UNTUK MENGHAPUS DARI FIREBASE
 const hapusDariFirebase = async function(docId) {
+  if(currentUserRole !== 'admin') {
+
+  showToast('❌ Hanya admin');
+
+  return;
+
+}
   if (confirm("Hapus transaksi ini dari database cloud?")) {
     try {
       await deleteDoc(doc(db, "transaksi_angkringan", docId));
@@ -2045,6 +2080,7 @@ async function login() {
     showToast('✓ Login berhasil');
 
     await loadTransactions();
+    renderFinanceChart();
 
   } catch(err) {
 
@@ -2182,6 +2218,7 @@ async function loadTransactions() {
     transactions.sort((a,b) => {
       return new Date(b.date) - new Date(a.date)
     });
+    window._txArr = transactions; // ← tambah ini
 
     renderDashboard();
     renderHistory();
@@ -2197,14 +2234,33 @@ async function loadTransactions() {
 
 }
 onAuthStateChanged(auth, async (user) => {
+  console.log(user.uid)
 
   if(user) {
+  const userRef = doc(db, "users", user.uid);
+
+    const userSnap = await getDoc(userRef);
+
+    if(userSnap.exists()) {
+
+      currentUserRole = userSnap.data().role || 'viewer';
+
+    } else {
+
+      currentUserRole = 'viewer';
+
+    }
+
+    applyRoleSystem();
+
+   
 
     document.getElementById('loginPage').style.display = 'none';
 
     document.getElementById('app').style.display = 'block';
 
     await loadTransactions();
+    renderFinanceChart();
 
   } else {
 
@@ -2249,9 +2305,31 @@ if(savedTheme === 'dark') {
   if(btn) btn.textContent = '☀️';
 
 }
+function applyRoleSystem() {
+  if(currentUserRole === 'viewer') {
+    // Sembunyikan tab Transaksi
+    document.querySelectorAll('nav button')[1].style.display = 'none';
+    // Sembunyikan semua tombol aksi
+    document.querySelectorAll('.btn-danger, .btn-primary, .type-btn, .expense-item, .menu-card').forEach(el => {
+      el.style.display = 'none';
+    });
+    // Disable quick menu jual cepat
+    document.querySelectorAll('.quick-btn').forEach(btn => {
+      if(btn.textContent.includes('Transaksi') || btn.textContent.includes('Jual')) {
+        btn.style.display = 'none';
+      }
+    });
+  }
+  // Admin = akses penuh, tidak perlu dibatasi
+}
 
 // Ekspos fungsi ke global agar bisa dipanggil oleh attribute onclick di HTML
 window.login = login;
+async function logout() {
+  await auth.signOut(auth);
+  showToast('✓ Berhasil keluar');
+}
+window.logout = logout;
 window.showPage = showPage;
 window.setType = setType;
 window.saveTransaction = saveTransaction;
@@ -2271,5 +2349,58 @@ window.hapusDariFirebase = hapusDariFirebase;
 
 
 </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let currentChartPeriod = 'week';
+
+function renderFinanceChart() {
+  const ctx = document.getElementById('financeChart');
+  if (!ctx) return;
+
+  const txArr = window._txArr || [];
+  const labels = [], incomeData = [], expenseData = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    labels.push(d.toLocaleDateString('id-ID', { day:'2-digit', month:'2-digit' }));
+    const key = d.toISOString().split('T')[0];
+    let income = 0, expense = 0;
+    txArr.forEach(t => {
+      if (t.date && t.date.startsWith(key)) {
+        if (t.type === 'pemasukan') income += Number(t.amount);
+        else expense += Number(t.amount);
+      }
+    });
+    incomeData.push(income);
+    expenseData.push(expense);
+  }
+
+  if (window.financeChartInstance) window.financeChartInstance.destroy();
+
+  window.financeChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label:'Pemasukan', data:incomeData, borderColor:'#48ff00', backgroundColor:'rgba(72,255,0,0.15)', tension:0.4, fill:true },
+        { label:'Pengeluaran', data:expenseData, borderColor:'#ff3b3b', backgroundColor:'rgba(255,59,59,0.12)', tension:0.4, fill:true }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: document.body.classList.contains('dark') ? '#fff' : '#222' }}},
+      scales: {
+        x: { ticks: { color: document.body.classList.contains('dark') ? '#ccc' : '#444' }},
+        y: { ticks: { color: document.body.classList.contains('dark') ? '#ccc' : '#444' }}
+      }
+    }
+  });
+}
+window.renderFinanceChart = renderFinanceChart;
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
 </body>
-</html>
+                                                                 </html>
