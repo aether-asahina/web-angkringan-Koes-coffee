@@ -1006,6 +1006,28 @@ body.dark .menu-card::after{
 }
 
 /* hover */
+.payment-methods {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.payment-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.payment-btn.active {
+  background: #3d8b37;
+  border-color: #4caf50;
+}
 
 .menu-card:hover{
   transform: translateY(-4px) scale(1.02);
@@ -1031,11 +1053,11 @@ body.dark .menu-card::after{
   0%{
     transform: rotate(0deg);
   }
-
   100%{
     transform: rotate(360deg);
   }
 }
+    
     
   </style>
 </head>
@@ -1116,7 +1138,15 @@ body.dark .menu-card::after{
       <button class="period-btn" onclick="setDashPeriod('month',this)">Bulan Ini</button>
       <button class="period-btn" onclick="setDashPeriod('all',this)">Semua</button>
     </div>
-    
+    <div class="card">
+  <h3>Cash</h3>
+  <p id="cashTotal">Rp 0</p>
+</div>
+
+<div class="card">
+  <h3>QRIS</h3>
+  <p id="qrisTotal">Rp 0</p>
+</div>
 
 
     <div class="quick-menu">
@@ -1329,6 +1359,29 @@ body.dark .menu-card::after{
           <label>Jumlah (Rp)</label>
           <input type="number" id="txAmount" placeholder="0" min="0" />
         </div>
+        <div class="field">
+  <label>METODE PEMBAYARAN</label>
+
+  <div class="payment-methods">
+
+    <button
+      type="button"
+      class="payment-btn active"
+      onclick="setPayment('cash', this)"
+    >
+      💵 CASH
+    </button>
+
+    <button
+      type="button"
+      class="payment-btn"
+      onclick="setPayment('qris', this)"
+    >
+      📱 QRIS
+    </button>
+
+  </div>
+</div>
         <div class="form-group">
           <label>Kategori</label>
           <select id="txCat"></select>
@@ -1642,6 +1695,7 @@ let lapPeriod    = 'today';
 let deleteId     = null;
 let selectedMenu = null;
 let currentUserRole = 'viewer';
+let selectedPayment = 'cash'; // ← tambah ini
 
 // ══════════════════════════════════════════════════
 //  PERSIST
@@ -1806,6 +1860,7 @@ async function saveTransaction() {
     catId,
     date,
     note,
+    payment: selectedPayment,
     createdAt: serverTimestamp()
   });
 
@@ -2219,6 +2274,15 @@ async function loadTransactions() {
       return new Date(b.date) - new Date(a.date)
     });
     window._txArr = transactions; // ← tambah ini
+    let cash = 0, qris = 0;
+transactions.forEach(t => {
+  if (t.type === 'pemasukan') {
+    if (t.payment === 'cash') cash += Number(t.amount);
+    if (t.payment === 'qris') qris += Number(t.amount);
+  }
+});
+document.getElementById('cashTotal').innerText = 'Rp ' + cash.toLocaleString('id-ID');
+document.getElementById('qrisTotal').innerText = 'Rp ' + qris.toLocaleString('id-ID');
 
     renderDashboard();
     renderHistory();
@@ -2347,7 +2411,11 @@ window.exportCSV = exportCSV;
 window.renderHistory = renderHistory;
 window.hapusDariFirebase = hapusDariFirebase;
 
-
+window.setPayment = function(type, el) {
+  selectedPayment = type;
+  document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
+  el.classList.add('active');
+};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -2403,4 +2471,4 @@ window.renderFinanceChart = renderFinanceChart;
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
 </body>
-                                                                 </html>
+  </html>
