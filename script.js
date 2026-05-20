@@ -838,9 +838,7 @@ window.setPayment = function(type, el) {
   document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
   el.classList.add('active');
 };
-</script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
+
 let currentChartPeriod = 'week';
 
 function renderFinanceChart() {
